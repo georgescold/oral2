@@ -1,5 +1,5 @@
-# Binaires et outils locaux
-tools/
+# Binaires et outils locaux (ffmpeg, yt-dlp...) — uniquement à la racine
+/tools/
 
 # Vidéos sources
 vidéo à analyser/
