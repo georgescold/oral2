@@ -1,0 +1,34 @@
+# Binaires et outils locaux
+tools/
+
+# Vidéos sources
+vidéo à analyser/
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+
+# Frames générées par l'analyse
+.frames_context/
+frames/
+
+# Dépendances Node
+node_modules/
+
+# Builds
+dist/
+build/
+
+# Logs et caches
+*.log
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / config locale
+.env
+.env.local
+.claude/settings.local.json
