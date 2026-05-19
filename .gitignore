@@ -14,3 +14,6 @@ vidéo à analyser/
 # OS
 .DS_Store
 Thumbs.db
+
+# Fichiers de lock temporaires LibreOffice / Word
+.~lock.*#

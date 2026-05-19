@@ -67,7 +67,7 @@ if errorlevel 1 (
     if errorlevel 1 (
         echo [ATTENTION] python-docx non installé - la conversion .docx sera désactivée.
     ) else (
-        echo [OK]    python + python-docx (conversion .docx active)
+        echo [OK]    python + python-docx ^(conversion .docx active^)
     )
 )
 
@@ -81,9 +81,9 @@ for /f "delims=" %%f in ('dir /b /o-d "vidéo à analyser\*.mp4" "vidéo à anal
     echo   !VIDEO_COUNT!. %%f
 )
 if !VIDEO_COUNT! EQU 0 (
-    echo   (aucune vidéo trouvée)
+    echo   ^(aucune vidéo trouvée^)
     echo.
-    echo Dépose ta vidéo (.mp4 .mov .avi .mkv .webm) dans le dossier
+    echo Dépose ta vidéo ^(.mp4 .mov .avi .mkv .webm^) dans le dossier
     echo "vidéo à analyser\" puis relance ce .bat.
     echo.
     pause
@@ -93,19 +93,18 @@ echo ------------------------------------------------------------
 echo.
 
 REM --- 7. Date du jour pour nommage des sorties ------------------
-for /f "tokens=2 delims==" %%i in ('"wmic os get localdatetime /value 2>nul | find ^"=^""') do set "DT=%%i"
-set "TODAY=!DT:~0,4!-!DT:~4,2!-!DT:~6,2!"
+for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"') do set "TODAY=%%i"
 
 echo Lancement de Claude Code...
 echo Sortie en direct dans ce terminal.
-echo Fichier final : résultat\Expose_^<NomVidéo^>_!TODAY!.md (+ .docx si python-docx OK)
+echo Fichier final : résultat\Expose_^<NomVidéo^>_!TODAY!.md ^(+ .docx si python-docx OK^)
 echo.
 echo ============================================================
 echo.
 
-set "PROMPT=Démarre une analyse CAPEPS Oral 2 natation. ÉTAPES OBLIGATOIRES dans cet ordre, en annonçant CHAQUE étape AVANT de la lancer pour que je voie la progression en direct : (1) Lis 'connaissances/Fiche méthodologie oral 2 natation.md', 'connaissances/TD5 situation dos Loys.md' et 'connaissances/memory.md' si tu ne les as pas encore en contexte. (2) Liste les vidéos présentes dans 'vidéo à analyser/' (la plus récente d'abord) et confirme-moi laquelle tu vas analyser. (3) Demande-moi le contexte pédagogique manquant : classe/niveau, nage, distance totale réellement nagée, séquence/n° de leçon, et mes comptages bruts si je les ai (CB total + mi-course, respirations total + mi-course, chrono total + mi-course). (4) Une fois le contexte reçu : appelle video_info, puis video_analyze (filtres scene_changes, motion) sur la vidéo, puis video_watch avec une stratégie d'extraction adaptée (FPS 3-5 sur cycles bras et respirations, FPS 0.5-1 sur portions stables, résolution 768). Annonce chaque appel d'outil avant exécution avec une phrase courte (« j'appelle video_info pour récupérer durée et résolution... »). (5) Produis l'exposé complet en 6 étapes selon la méthodologie (accroche/CA, analyse ERPI avec calculs amplitude/fréquence/vitesse en excluant la coulée, 3 hypothèses, axe de transformation + S4C, situation évolutive SA1+SA Évolution structurée comme TD5 situation dos Loys.md, conclusion CT/MT/LT). Ton sobre, technique, prose argumentée, pas d'emojis. (6) SORTIE OBLIGATOIRE : avec l'outil Write, écris l'exposé complet dans 'résultat/Expose_<NomVidéoSansExt>_!TODAY!.md' (remplace <NomVidéoSansExt> par le nom de la vidéo analysée sans son extension, en gardant accents et espaces). Puis lance via Bash : python tools/md_to_docx.py \"résultat/Expose_<NomVidéoSansExt>_!TODAY!.md\" — confirme-moi ensuite les deux chemins absolus créés. Démarre maintenant à l'étape (1)."
+set "PROMPT=Démarre une analyse CAPEPS Oral 2 natation. ÉTAPES OBLIGATOIRES dans cet ordre, en annonçant CHAQUE étape AVANT de la lancer pour que je voie la progression en direct : (1) Lis 'connaissances/Fiche méthodologie oral 2 natation.md', 'connaissances/TD5 situation dos Loys.md' et 'connaissances/memory.md' si tu ne les as pas encore en contexte. (2) Liste les vidéos présentes dans 'vidéo à analyser/' (la plus récente d'abord) et confirme-moi laquelle tu vas analyser. (3) LECTURE DE LA FICHE CONTEXTE INTÉGRÉE À LA VIDÉO : la vidéo affiche TOUJOURS dans ses premières secondes une fiche contexte (Type d'établissement, Classe, Élève(s) observé(s), Dispositif, Montage vidéo). Commence par extraire les frames 0-7s à 2 fps via ffmpeg (ou video_watch) et LIS cette fiche. Reporte-moi explicitement les 5 champs lus. Ne me demande JAMAIS un champ qui figure déjà sur la fiche. Demande-moi uniquement ce qui manque (séquence/n° de leçon dans la programmation, et mes comptages bruts si je les ai : CB total + mi-course, respirations total + mi-course, chrono total + mi-course). Si je n'ai pas de comptages, tu feras tout toi-même. (4) Une fois le contexte complet : repère aussi les bornes temporelles des phases (fiche contexte, préparation au plot, plongeon, coulée subaquatique, nage utile, touche d'arrivée). EXCLUS la coulée des calculs. Appelle video_info, puis video_analyze (filtres scene_changes, motion) sur la vidéo, puis video_watch sur la SEULE phase nagée utile (FPS 3-5 sur cycles bras et respirations, FPS 0.5-1 sur portions stables, résolution 768). Annonce chaque appel d'outil avant exécution avec une phrase courte. (5) Produis l'exposé complet en 6 étapes selon la méthodologie (accroche/CA, analyse ERPI avec calculs amplitude/fréquence/vitesse en excluant la coulée, 3 hypothèses, axe de transformation + S4C, situation évolutive SA1+SA Évolution structurée comme TD5 situation dos Loys.md, conclusion CT/MT/LT). Ton sobre, technique, prose argumentée, pas d'emojis. (6) SORTIE OBLIGATOIRE : avec l'outil Write, écris l'exposé complet dans 'résultat/Expose_<NomVidéoSansExt>_!TODAY!.md' (remplace <NomVidéoSansExt> par le nom de la vidéo analysée sans son extension, en gardant accents et espaces). Puis lance via Bash : python tools/md_to_docx.py 'résultat/Expose_<NomVidéoSansExt>_!TODAY!.md' — confirme-moi ensuite les deux chemins absolus créés. Démarre maintenant à l'étape (1)."
 
-claude "%PROMPT%"
+claude --dangerously-skip-permissions "%PROMPT%"
 
 echo.
 echo ============================================================
