@@ -4,6 +4,9 @@ title CAPEPS Oral 2 - Analyse video natation
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
+REM --- 0. Ajout des binaires locaux (tools\) au PATH de la session
+set "PATH=%~dp0tools;%PATH%"
+
 echo.
 echo ============================================================
 echo   CAPEPS Oral 2 - Analyse video natation
